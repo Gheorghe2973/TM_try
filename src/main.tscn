@@ -1,0 +1,64 @@
+[gd_scene load_steps=6 format=3 uid="uid://df1v47itl0l2a"]
+
+[ext_resource type="Script" uid="uid://ddjhh7gmxa5p" path="res://src/main.gd" id="1_63o2a"]
+[ext_resource type="TileSet" uid="uid://dke67pxwetxpt" path="res://assets/tile_set.tres" id="2_7lwhf"]
+[ext_resource type="Script" uid="uid://de730gcfq0p0n" path="res://src/game_of_life.gd" id="3_ln0gl"]
+[ext_resource type="Texture2D" uid="uid://dmrxl4s6a4j8" path="res://assets/cursor.tres" id="4_syfuf"]
+[ext_resource type="PackedScene" uid="uid://cf1we1w8yj43e" path="res://src/actions.tscn" id="4_tvx3k"]
+
+[node name="Main" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+script = ExtResource("1_63o2a")
+
+[node name="GameOfLife" type="Node" parent="."]
+script = ExtResource("3_ln0gl")
+grid_height = 80
+grid_width = 144
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.1
+autostart = true
+
+[node name="Layout" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Layout/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1136, 584)
+render_target_update_mode = 4
+
+[node name="Grid" type="TileMapLayer" parent="Layout/SubViewportContainer/SubViewport"]
+unique_name_in_owner = true
+use_parent_material = true
+scale = Vector2(0.5, 0.5)
+tile_set = ExtResource("2_7lwhf")
+
+[node name="Cursor" type="Sprite2D" parent="Layout/SubViewportContainer/SubViewport"]
+unique_name_in_owner = true
+position = Vector2(-32, -32)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_syfuf")
+
+[node name="Actions" parent="Layout" instance=ExtResource("4_tvx3k")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[connection signal="updated" from="GameOfLife" to="." method="_on_game_of_life_updated"]
+[connection signal="timeout" from="Timer" to="GameOfLife" method="evolve"]
+[connection signal="gui_input" from="Layout/SubViewportContainer" to="." method="_on_sub_viewport_container_gui_input"]
+[connection signal="action_requested" from="Layout/Actions" to="." method="_on_actions_action_requested"]

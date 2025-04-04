@@ -1,0 +1,69 @@
+[gd_scene load_steps=2 format=3 uid="uid://cf1we1w8yj43e"]
+
+[ext_resource type="Script" uid="uid://c6bflixbq87en" path="res://src/actions.gd" id="1_a44rh"]
+
+[node name="Actions" type="HBoxContainer"]
+offset_right = 932.0
+offset_bottom = 31.0
+script = ExtResource("1_a44rh")
+
+[node name="Reset" type="Button" parent="."]
+layout_mode = 2
+text = "Clear"
+
+[node name="Populate" type="Button" parent="."]
+layout_mode = 2
+text = "Populate"
+
+[node name="Rate" type="SpinBox" parent="."]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+min_value = 20.0
+max_value = 80.0
+step = 5.0
+value = 25.0
+rounded = true
+alignment = 3
+update_on_text_changed = true
+prefix = "Rate:"
+suffix = "%"
+custom_arrow_step = 5.0
+
+[node name="Step" type="Button" parent="."]
+layout_mode = 2
+text = "Step"
+
+[node name="Animate" type="CheckButton" parent="."]
+layout_mode = 2
+text = "Animate"
+
+[node name="Interval" type="Label" parent="."]
+layout_mode = 2
+text = "Interval"
+
+[node name="IntervalOptions" type="OptionButton" parent="."]
+layout_mode = 2
+
+[node name="Generation" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Generation: 0"
+horizontal_alignment = 1
+
+[node name="Population" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Population: 0 (0.0%)"
+horizontal_alignment = 1
+
+[node name="Cursor" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Cursor at (0, 0)"
+horizontal_alignment = 1
+
+[connection signal="pressed" from="Reset" to="." method="_on_action_button_pressed" binds= [&"clear"]]
+[connection signal="pressed" from="Populate" to="." method="_on_action_button_pressed" binds= [&"populate"]]
+[connection signal="pressed" from="Step" to="." method="_on_action_button_pressed" binds= [&"step"]]
+[connection signal="toggled" from="Animate" to="." method="_on_animate_toggled"]
+[connection signal="item_selected" from="IntervalOptions" to="." method="_on_interval_options_item_selected"]
